@@ -1,4 +1,4 @@
-// src/app/api/login/route.ts
+
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import dbConnect from '@/lib/dbConnect';
@@ -7,11 +7,11 @@ import User from '@/models/user';
 export async function POST(request: Request) {
   await dbConnect();
   const body = await request.json();
-  console.log('Request Body:', body); // Log the whole request body
+  console.log('Request Body:', body); 
 
   const { email, password } = body;
   console.log('email:', email);
-  console.log('password:', password); // Log password for further debugging
+  console.log('password:', password); 
 
   const user = await User.findOne({ email });
   if (!user) {

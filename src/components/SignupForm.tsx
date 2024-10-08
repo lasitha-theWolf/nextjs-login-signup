@@ -4,7 +4,8 @@ import axios from 'axios';
 import useUserStore from '@/stores/userStore';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
-import { set } from 'mongoose';
+import { setCookie } from '@/utils/cookies';
+import 'font-awesome/css/font-awesome.min.css';
 
 const SignupForm = () => {
     const router = useRouter();
@@ -30,12 +31,13 @@ const SignupForm = () => {
         try {
             const res = await axios.post('/api/signup', { username, email, password });
             console.log(res.data.message);
+            // Set cookie on successful signup
+            setCookie('user', JSON.stringify(res.data.user), { expires: 1 });
     
-            // Show success alert
             Swal.fire({
                 icon: 'success',
                 title: 'Signup Successful',
-                text: res.data.message, // Use the success message from the server
+                text: res.data.message, 
                 confirmButtonText: 'OK',
             }).then(() => {
                 router.push('/login');
@@ -45,7 +47,6 @@ const SignupForm = () => {
             if (axios.isAxiosError(err) && err.response) {
                 console.error(err.response.data.message);
     
-                // Show error alert
                 Swal.fire({
                     icon: 'error',
                     title: 'Signup Failed',
@@ -136,7 +137,7 @@ const SignupForm = () => {
                         type="submit"
                         className="w-full bg-green-800 text-white py-3 rounded-lg hover:bg-green-700 transition duration-200"
                     >
-                        Sign Up {isLoading && <i className="ml-2 fas fa-spinner fa-spin"></i>}
+                        Sign Up {isLoading && <i className="ml-2 fas fa-spinner fa-spin text-white"></i>}
                     </button>
 
                     {/* Social Media Login */}

@@ -3,7 +3,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import useUserStore from '@/stores/userStore';
 import Swal from 'sweetalert2';
-import { set } from 'mongoose';
+import { setCookie } from '@/utils/cookies';
+import 'font-awesome/css/font-awesome.min.css';
 
 const LoginForm = () => {
     const { setEmail, email } = useUserStore();
@@ -16,13 +17,15 @@ const LoginForm = () => {
         e.preventDefault();
         try {
             const res = await axios.post('/api/login', { email, password });
+            // Set cookie on successful login
+            setCookie('user', JSON.stringify(res.data.user), { expires: 1 });
             console.log(res.data.message);
-    
-            // Show success alert
+
+        // Show success alert
             Swal.fire({
                 icon: 'success',
                 title: 'Login Successful',
-                text: res.data.message, // Use the success message from the server
+                text: res.data.message, 
                 confirmButtonText: 'OK',
             });
             setIsLoading(false);
@@ -30,16 +33,15 @@ const LoginForm = () => {
             if (axios.isAxiosError(err) && err.response) {
                 console.error(err.response.data.message);
     
-                // Show error alert
                 Swal.fire({
                     icon: 'error',
                     title: 'Login Failed',
-                    text: err.response.data.message, // Use the error message from the server
+                    text: err.response.data.message, 
                     confirmButtonText: 'Try Again',
                 });
             } else {
                 console.error(err);
-                // Show a generic error alert
+           
                 Swal.fire({
                     icon: 'error',
                     title: 'Something went wrong',
@@ -104,7 +106,7 @@ const LoginForm = () => {
                         type="submit"
                         className="w-full bg-[#3C1AB9] text-white py-3 rounded-lg hover:bg-[#3C1AB9] transition duration-200"
                     >
-                        Log in {isLoading && <i className="ml-2 fas fa-spinner fa-spin"></i>}
+                        Log in {isLoading && <i className="ml-2 fas fa-spinner fa-spin text-white"></i>}
                     </button>
 
                     {/* Social Media Login */}
