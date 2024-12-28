@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { setCookie } from '@/utils/cookies';
 import 'font-awesome/css/font-awesome.min.css';
 
-//function main
+//function main   
 const LoginForm = () => {
     const { setEmail, email } = useUserStore();
     const [password, setPassword] = useState('');
